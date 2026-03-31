@@ -19,6 +19,7 @@ class GardnerNet(nn.Module):
         super().__init__()
 
         self.logical = nn.Sequential(nn.Linear(dim, hidden), nn.ReLU())
+
         self.linguistic = nn.TransformerEncoder(
             nn.TransformerEncoderLayer(d_model=dim, nhead=2), num_layers=1)
 
@@ -30,25 +31,22 @@ class GardnerNet(nn.Module):
         self.intrapersonal = nn.GRU(dim, hidden, batch_first=True)
         self.naturalistic = nn.Linear(dim, hidden)
 
-        self.fusion = nn.Linear(hidden*6 + 4*4 + 4*4, 1)
+        self.fusion = None
 
     def forward(self, x, seq, img, audio, edge_index):
         logical = self.logical(x)
-
         ling = self.linguistic(seq).mean(dim=1)
-
         spatial = self.spatial(img).view(x.size(0), -1)
-
         musical = self.musical(audio).view(x.size(0), -1)
-
         kin = torch.relu(self.kinesthetic(x))
-
         inter = self.interpersonal(x, edge_index)
-
         _, h = self.intrapersonal(seq)
         intra = h[-1]
-
         nat = torch.relu(self.naturalistic(x))
 
         combined = torch.cat([logical, ling, spatial, musical, kin, inter, intra, nat], dim=-1)
+
+        if self.fusion is None:
+            self.fusion = nn.Linear(combined.size(1), 1).to(combined.device)
+
         return self.fusion(combined)

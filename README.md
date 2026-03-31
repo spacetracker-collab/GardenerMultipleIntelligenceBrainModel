@@ -1,33 +1,16 @@
 
-# Gardner Multiple Intelligences Neural System (PyTorch + PyG)
+# Gardner Multiple Intelligences Neural System (Fixed Version)
 
-## Overview
-This project implements Howard Gardner's Multiple Intelligences as a modular neural system:
+## Fixes Applied
+- Dynamic fusion layer (no shape mismatch)
+- Correct PyG edge_index (bidirectional edges)
+- Stable architecture for multi-modal concatenation
 
-Intelligences:
-- Logical-Mathematical (MLP)
-- Linguistic (Transformer Encoder)
-- Spatial (CNN)
-- Musical (Audio CNN)
-- Bodily-Kinesthetic (Policy Network)
-- Interpersonal (Graph Neural Network - PyG)
-- Intrapersonal (GRU self-model)
-- Naturalistic (Environmental embedding)
-
-## Key Features
-- PyTorch + PyTorch Geometric (GNN for interpersonal intelligence)
-- Multi-agent simulation (agents = nodes)
-- Emergence via graph interactions
-- Evolutionary fitness function
-
-## Fitness
-Fitness = mean(output) + std(output) - var(output)
-
-## Files
-- model.py
-- train.py
-- colab.ipynb
-- README.md
+## Features
+- PyTorch + PyTorch Geometric (GNN)
+- Multi-agent simulation
+- Emergence via graph interaction
+- Evolutionary fitness
 
 ## Install
 pip install torch torchvision torchaudio torch-geometric
